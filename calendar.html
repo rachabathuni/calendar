@@ -5,6 +5,11 @@
 <style>
 	body {
 		font-family: verdana;
+		text-align: center;
+	}
+
+	div.outer {
+		display: inline-block;
 	}
 
 	div.month {
@@ -43,13 +48,29 @@
 		color: #416eff;
 	}
 
-	h1.yeartext {
+	div.yeartitle {
 		padding: 0px 5px 5px 10px;
-		font-size: 2em;
+		justify-content: space-between;
 		margin: 0px;
 		color: #ff9441;
+		display: flex;
+		align-items: center;
 	}
 
+	h1.yearnumber {
+		padding: 5px;
+		margin: 5px;
+	}
+
+	h3.prevyear {
+		font-size: 0.8em;
+    	cursor: pointer;
+	}
+
+	h3.nextyear {
+		font-size: 0.8em;
+    	cursor: pointer;
+	}
 
 	div.monthtitle {
 		padding: 0px;
@@ -67,11 +88,11 @@
 		vertical-align: top;
 	}
 
-	span.left, span.right {
-    	cursor: pointer;
+	@media print {
+  		.no-print {
+    		display: none;
+  		}
 	}
-
-
 
 </style>
 <script>
@@ -192,7 +213,7 @@ function nextYear() {
 
 function createCalendar(year) {
 	$('#calendar').empty();
-	$('#yearnumber').text(year);
+	setYears(year);
 	const today = new Date();
 	const thisYear = today.getFullYear();
 	const thisMonth = today.getMonth() + 1; 
@@ -232,12 +253,18 @@ function createCalendar(year) {
 	$('#calendar').append(table);
 }
 
+function setYears(year) {
+	$('#yearnumber').text(year);
+	$('#prevyear').text(year-1);
+	$('#nextyear').text(year+1);
+}
+
 
 function onLoad() {
 	g_year = new Date().getFullYear();
 	createCalendar(g_year);
-	$('#left').click(pastYear);
-	$('#right').click(nextYear);
+	$('#prevyear').click(pastYear);
+	$('#nextyear').click(nextYear);
 }
 window.addEventListener("load", (event) => {
 	onLoad();
@@ -247,11 +274,9 @@ window.addEventListener("load", (event) => {
 <body id="mainbody">
 <div class="outer" id="outer">
 	<div class="yeartitle">
-		<h1 class="yeartext" id="year">
-		<span class="left" id="left">&lt;</span>
-		<span id="yearnumber">2025</span>
-		<span class="right" id="right">&gt;</span>
-		</h1>
+		<h3 class="prevyear no-print" id="prevyear">2024</h3>
+		<h1 class="yearnumber" id="yearnumber">2025</h1>
+		<h3 class="nextyear no-print" id="nextyear">2026</h3>
 	</div>
 	<div class="calendar" id="calendar">
 	</div>
