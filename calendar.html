@@ -6,15 +6,11 @@
 	body {
 		font-family: verdana;
 	}
-	div.month {
-		background-color: #deeff8;
-		/* width: 400px;
-		height: 400px; */
-		border: #2176ff 1px solid;
-		margin: 10px;
-	}
 
 	div.month {
+		background-color: #deeff8;
+		border: #2176ff 1px solid;
+		margin: 3px;
 		padding: 5px 10px 10px 10px;
 	}
 
@@ -25,7 +21,7 @@
 
 	td.today {
 		border: #078201 1px solid;
-		background-color: #a8ffa7;
+		background-color: #dcfc81;
 	}
 
 	td.sunday {
@@ -43,7 +39,7 @@
 		padding: 0px 5px 5px 10px;
 		font-size: 2em;
 		margin: 0px;
-		color: #416eff;
+		color: #ff9441;
 	}
 
 
@@ -103,7 +99,8 @@ function createMonthTable() {
 }
 
 function createMonthHeading() {
-	const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	// const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	const weekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 	let tr = createMonthRow();
 
 	for (let i=0; i<weekdays.length; i++) {
