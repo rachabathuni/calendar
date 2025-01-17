@@ -1,0 +1,249 @@
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+	body {
+		font-family: verdana;
+	}
+	div.month {
+		background-color: #deeff8;
+		/* width: 400px;
+		height: 400px; */
+		border: #2176ff 1px solid;
+		margin: 10px;
+	}
+
+	div.month {
+		padding: 5px 10px 10px 10px;
+	}
+
+	td.calcol, th.calhead {
+		text-align: center;
+		padding: 5px 5px 5px 5px;
+	}
+
+	td.today {
+		border: #078201 1px solid;
+		background-color: #a8ffa7;
+	}
+
+	td.sunday {
+		color: #df2a2a;
+	}
+
+	h1.monthtext {
+		padding: 0px 5px 5px 10px;
+		font-size: 1.8em;
+		margin: 0px;
+		color: #416eff;
+	}
+
+	h1.yeartext {
+		padding: 0px 5px 5px 10px;
+		font-size: 2em;
+		margin: 0px;
+		color: #416eff;
+	}
+
+
+	div.monthtitle {
+		padding: 0px;
+	}	
+
+	table.calgrid {
+		vertical-align: top;
+	}
+
+	tr.gridtr {
+		vertical-align: top;
+	}
+
+	td.gridtd {
+		vertical-align: top;
+	}
+
+	span.left, span.right {
+    	cursor: pointer;
+	}
+
+
+</style>
+<script>
+
+var g_year = null;
+
+function createMonthDiv(monthTitle,monthTable) {
+	let monthDiv = $('<div>', {
+		class: "month"
+	});
+
+	let monthTitleDiv = $('<div>', {
+		class: "monthtitle"
+	});
+
+	let monthText = $('<h1>', {
+		class: "monthtext",
+		text: monthTitle
+	});
+
+	monthTitleDiv.append(monthText);
+	monthDiv.append(monthTitleDiv);
+	monthDiv.append(monthTable);
+	return monthDiv;
+}
+
+function createMonthTable() {
+	
+	let table = $('<table>', {
+		class: "calmonth"
+	});
+
+	return table;
+}
+
+function createMonthHeading() {
+	const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	let tr = createMonthRow();
+
+	for (let i=0; i<weekdays.length; i++) {
+		let th = $('<th>', {
+			class: "calhead",
+			text: weekdays[i]
+		});
+		tr.append(th);
+	}
+
+	return tr;
+}
+
+function createMonthRow() {
+	return $('<tr>', {
+		class: "calrow"
+	});
+	return tr;
+}
+
+function createMonth(monthTitle, startIndex, nDays, selectedDay) {
+	day = 1;
+	let monthTable = createMonthTable();
+	let monthDiv = createMonthDiv(monthTitle, monthTable);
+	let th = createMonthHeading();
+	monthTable.append(th);
+	for (let row=0; row<=5; row++) {
+		const tr = createMonthRow();
+		for (let col=0; col<=6; col++) {
+			let dayStr = "&nbsp";
+			let tdClass = "calcol";
+
+			if ((row != 0 || col >= startIndex ) && (day <= nDays)) {
+				dayStr = "" + day;
+				if (day == selectedDay) {
+					tdClass = tdClass + " today";
+				}
+
+				if (col == 0) {
+					tdClass = tdClass + " sunday";
+				}
+				day++;
+			}
+			let td = $('<td>', {class: tdClass});
+			td.html(dayStr);
+			tr.append(td);
+		}
+		monthTable.append(tr);
+	}
+
+	return monthDiv;
+}
+
+function dayOfWeek(year, month, day) {
+    // Create a new Date object (months are 0-indexed in JavaScript)
+    const date = new Date(year, month - 1, day);
+    // Get the day index (0 = Sunday, 6 = Saturday)
+    return date.getDay();
+}
+
+function daysInMonth(year, month) {
+    // Create a date object for the first day of the next month and set day to 0 to get the last day of the current month
+    return new Date(year, month, 0).getDate();
+}
+
+function pastYear() {
+	g_year = g_year - 1;
+	createCalendar(g_year)
+}
+
+function nextYear() {
+	g_year = g_year + 1;
+	createCalendar(g_year)
+}
+
+function createCalendar(year) {
+	$('#calendar').empty();
+	$('#yearnumber').text(year);
+	const today = new Date();
+	const thisYear = today.getFullYear();
+	const thisMonth = today.getMonth() + 1; 
+	const thisDay = today.getDate();
+	const months = ["January", "February", "March", 
+					"April", "May", "June", "July", 
+					"August", "September", "October", 
+					"November", "December"];
+
+	let table = $('<table>', {
+		class: "calgrid"
+	});
+	let tr = null;
+	for (let month=1; month<=12; month++) {
+		if (((month - 1) % 4) == 0) {
+			tr = $("<tr>", {
+				class: "gridtr"
+			});
+			table.append(tr);
+		}
+		const startIndex = dayOfWeek(year, month, 1);
+		const nDays = daysInMonth(year, month);
+		let selectedDay = -1;
+		if (thisYear == year && thisMonth == month) {
+			selectedDay = thisDay;
+		}
+
+		const monthDiv = createMonth(months[month-1], startIndex, nDays, selectedDay);
+		const td = $("<td>", {
+			class: "gridtd"
+		});
+
+		td.append(monthDiv);
+		tr.append(td);
+	}
+
+	$('#calendar').append(table);
+}
+
+
+function onLoad() {
+	g_year = new Date().getFullYear();
+	createCalendar(g_year);
+	$('#left').click(pastYear);
+	$('#right').click(nextYear);
+}
+window.addEventListener("load", (event) => {
+	onLoad();
+});
+</script>
+</head>
+<body id="mainbody">
+<div class="outer" id="outer">
+	<div class="yeartitle">
+		<h1 class="yeartext" id="year">
+		<span class="left" id="left">&lt;</span>
+		<span id="yearnumber">2025</span>
+		<span class="right" id="right">&gt;</span>
+		</h1>
+	</div>
+	<div class="calendar" id="calendar">
+	</div>
+</div>
+</body>
+
+</html>

@@ -1,2 +1,5 @@
-# calendar
-Simple one-page calendar
+# Simple Calendar
+Simple one-page calendar to view a yearly calendar. HTML, JavaScript and CSS is in one page making it a self-sufficient single page app.
+
+## Screenshot
+![Calendar Screenshot](https://raw.githubusercontent.com/rachabathuni/calendar/main/images/calendar.png)
