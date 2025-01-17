@@ -162,16 +162,22 @@ function createMonth(monthTitle, startIndex, nDays, selectedDay) {
 		for (let col=0; col<=6; col++) {
 			let dayStr = "&nbsp";
 			let tdClass = "calcol";
+			let hilightDay = false;
 
 			if ((row != 0 || col >= startIndex ) && (day <= nDays)) {
 				dayStr = "" + day;
 				if (col == 0) {
 					tdClass = tdClass + " sunday";
 				}
+
+				if (selectedDay == day) {
+					hilightDay = true;
+				}
+
 				day++;
 			}
 			let td = $('<td>', {class: tdClass});
-			if (selectedDay == day) {
+			if (hilightDay) {
 				let innerdiv = $('<div>', {class: "today"});
 				td.addClass("todaycol");
 				innerdiv.html(dayStr);
