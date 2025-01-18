@@ -277,11 +277,40 @@ function setYears(year) {
 }
 
 
+function millisUntilTomorrow() {
+  const now = new Date();  // Current time
+  const tomorrow = new Date();
+
+  // Set to midnight of the next day
+  tomorrow.setHours(24, 0, 0, 0);
+
+  // Calculate difference in milliseconds
+  return tomorrow - now;
+}
+
+
+function handleTimeout() {
+	const today = new Date();
+	const thisYear = today.getFullYear();
+	if (g_year == thisYear) {
+		createCalendar(g_year)
+	}
+	startUpdateTimer();
+}
+
+
+function startUpdateTimer() {
+	const waitTime = millisUntilTomorrow();
+	setTimeout(handleTimeout, waitTime);
+}
+
+
 function onLoad() {
 	g_year = new Date().getFullYear();
 	createCalendar(g_year);
 	$('#prevyear').click(pastYear);
 	$('#nextyear').click(nextYear);
+	startUpdateTimer();
 }
 window.addEventListener("load", (event) => {
 	onLoad();
