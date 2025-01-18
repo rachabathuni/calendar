@@ -100,6 +100,7 @@
 
 var g_year = null;
 
+
 function createMonthDiv(monthTitle,monthTable) {
 	let monthDiv = $('<div>', {
 		class: "month"
@@ -120,6 +121,7 @@ function createMonthDiv(monthTitle,monthTable) {
 	return monthDiv;
 }
 
+
 function createMonthTable() {
 	
 	let table = $('<table>', {
@@ -128,6 +130,7 @@ function createMonthTable() {
 
 	return table;
 }
+
 
 function createMonthHeading() {
 	// const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -145,12 +148,14 @@ function createMonthHeading() {
 	return tr;
 }
 
+
 function createMonthRow() {
 	return $('<tr>', {
 		class: "calrow"
 	});
 	return tr;
 }
+
 
 function createMonth(monthTitle, startIndex, nDays, selectedDay) {
 	day = 1;
@@ -196,6 +201,7 @@ function createMonth(monthTitle, startIndex, nDays, selectedDay) {
 	return monthDiv;
 }
 
+
 function dayOfWeek(year, month, day) {
     // Create a new Date object (months are 0-indexed in JavaScript)
     const date = new Date(year, month - 1, day);
@@ -203,20 +209,23 @@ function dayOfWeek(year, month, day) {
     return date.getDay();
 }
 
+
 function daysInMonth(year, month) {
-    // Create a date object for the first day of the next month and set day to 0 to get the last day of the current month
     return new Date(year, month, 0).getDate();
 }
+
 
 function pastYear() {
 	g_year = g_year - 1;
 	createCalendar(g_year)
 }
 
+
 function nextYear() {
 	g_year = g_year + 1;
 	createCalendar(g_year)
 }
+
 
 function createCalendar(year) {
 	$('#calendar').empty();
@@ -260,6 +269,7 @@ function createCalendar(year) {
 	$('#calendar').append(table);
 }
 
+
 function setYears(year) {
 	$('#yearnumber').text(year);
 	$('#prevyear').text(year-1);
@@ -277,6 +287,7 @@ window.addEventListener("load", (event) => {
 	onLoad();
 });
 </script>
+
 </head>
 <body id="mainbody">
 <div class="outer" id="outer">
@@ -289,5 +300,4 @@ window.addEventListener("load", (event) => {
 	</div>
 </div>
 </body>
-
 </html>
