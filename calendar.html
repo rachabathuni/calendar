@@ -95,10 +95,18 @@
   		}
 	}
 
+	td.holiday {
+		border-style: solid;
+		border-width: 1px 2px 2px 1px;
+		border-color: #ff9595;
+
+	}
+
 </style>
 <script>
 
 var g_year = null;
+var g_holidays = null;
 
 
 function createMonthDiv(monthTitle,monthTable) {
@@ -156,9 +164,23 @@ function createMonthRow() {
 	return tr;
 }
 
+function formatDate(year, month, day) {
+  // Ensure month and day are zero-padded to 2 digits
+  const formattedMonth = String(month).padStart(2, '0');
+  const formattedDay = String(day).padStart(2, '0');
 
-function createMonth(monthTitle, startIndex, nDays, selectedDay) {
+  return `${year}-${formattedMonth}-${formattedDay}`;
+}
+
+
+function createMonth(year, monthIndex, startIndex, nDays, selectedDay) {
+	const months = ["January", "February", "March", 
+					"April", "May", "June", "July", 
+					"August", "September", "October", 
+					"November", "December"];
+
 	day = 1;
+	const monthTitle = months[monthIndex-1]
 	let monthTable = createMonthTable();
 	let monthDiv = createMonthDiv(monthTitle, monthTable);
 	let th = createMonthHeading();
@@ -178,6 +200,11 @@ function createMonth(monthTitle, startIndex, nDays, selectedDay) {
 
 				if (selectedDay == day) {
 					hilightDay = true;
+				}
+
+				fmtDate = formatDate(year, monthIndex, day);
+				if (g_holidays.includes(fmtDate)) {
+					tdClass = tdClass + " holiday";
 				}
 
 				day++;
@@ -234,10 +261,6 @@ function createCalendar(year) {
 	const thisYear = today.getFullYear();
 	const thisMonth = today.getMonth() + 1; 
 	const thisDay = today.getDate();
-	const months = ["January", "February", "March", 
-					"April", "May", "June", "July", 
-					"August", "September", "October", 
-					"November", "December"];
 
 	let table = $('<table>', {
 		class: "calgrid"
@@ -257,7 +280,7 @@ function createCalendar(year) {
 			selectedDay = thisDay;
 		}
 
-		const monthDiv = createMonth(months[month-1], startIndex, nDays, selectedDay);
+		const monthDiv = createMonth(year, month, startIndex, nDays, selectedDay);
 		const td = $("<td>", {
 			class: "gridtd"
 		});
@@ -304,13 +327,25 @@ function startUpdateTimer() {
 	setTimeout(handleTimeout, waitTime);
 }
 
-
-function onLoad() {
+function showInitialCalendar() {
 	g_year = new Date().getFullYear();
 	createCalendar(g_year);
+	startUpdateTimer();
+}
+
+function handleLoadHolidays(data) {
+	g_holidays = data;
+	showInitialCalendar();
+}
+
+function loadHolidays() {
+	$.getJSON("data/holidays.json", handleLoadHolidays);
+}
+
+function onLoad() {
 	$('#prevyear').click(pastYear);
 	$('#nextyear').click(nextYear);
-	startUpdateTimer();
+	loadHolidays();
 }
 window.addEventListener("load", (event) => {
 	onLoad();
