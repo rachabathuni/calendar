@@ -95,11 +95,20 @@
   		}
 	}
 
-	td.holiday {
+	span.holiday {
 		border-style: solid;
-		border-width: 1px 2px 2px 1px;
-		border-color: #ff9595;
+		border-color: red;
+		border-width: 0px 0px 3px 0px;
+		display: block;
+	}
 
+	table.calmonth {
+		table-layout: fixed;
+		border-collapse: collapse;
+	}
+
+	tr.calrow {
+		width: 120px;
 	}
 
 </style>
@@ -192,6 +201,7 @@ function createMonth(year, monthIndex, startIndex, nDays, selectedDay) {
 			let tdClass = "calcol";
 			let hilightDay = false;
 
+			let holiday = false;
 			if ((row != 0 || col >= startIndex ) && (day <= nDays)) {
 				dayStr = "" + day;
 				if (col == 0) {
@@ -204,20 +214,25 @@ function createMonth(year, monthIndex, startIndex, nDays, selectedDay) {
 
 				fmtDate = formatDate(year, monthIndex, day);
 				if (g_holidays.includes(fmtDate)) {
-					tdClass = tdClass + " holiday";
+					holiday = true;
 				}
 
 				day++;
 			}
 			let td = $('<td>', {class: tdClass});
+			let daySpan = $('<span>', {class: "day"});
+			if (holiday) {
+				daySpan.addClass("holiday");
+			}
+			daySpan.html(dayStr);
 			if (hilightDay) {
 				let innerdiv = $('<div>', {class: "today"});
 				td.addClass("todaycol");
-				innerdiv.html(dayStr);
+				innerdiv.append(daySpan);
 				td.append(innerdiv);
 			}
 			else {
-				td.html(dayStr);
+				td.html(daySpan);
 			}
 
 			tr.append(td);
