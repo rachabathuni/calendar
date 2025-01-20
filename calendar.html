@@ -213,7 +213,7 @@ function createMonth(year, monthIndex, startIndex, nDays, selectedDay) {
 				}
 
 				fmtDate = formatDate(year, monthIndex, day);
-				if (g_holidays.includes(fmtDate)) {
+				if (g_holidays != null && g_holidays.includes(fmtDate)) {
 					holiday = true;
 				}
 
@@ -348,13 +348,17 @@ function showInitialCalendar() {
 	startUpdateTimer();
 }
 
-function handleLoadHolidays(data) {
-	g_holidays = data;
-	showInitialCalendar();
-}
 
 function loadHolidays() {
-	$.getJSON("data/holidays.json", handleLoadHolidays);
+	$.getJSON("data/holidays.json")
+		.done(function(data) {
+			g_holidays = data;
+			showInitialCalendar();
+		})
+		.fail(function(jqxhr, textStatus, error) {
+			g_holidays = null;
+			showInitialCalendar();
+		});
 }
 
 function onLoad() {
