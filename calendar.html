@@ -76,19 +76,34 @@
 
 	div.monthtitle {
 		padding: 0px;
+		border: 0px;
+		text-align: left;
 	}	
 
-	table.calgrid {
-		vertical-align: top;
-	}
+	div.responsivegrid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* Default: 4 columns */
+      gap: 5px; /* Space between cells */
+      width: 100%;
+    }
 
-	tr.gridtr {
-		vertical-align: top;
-	}
+	@media (max-width: 1072px) {
+      div.responsivegrid {
+        grid-template-columns: repeat(3, 1fr); /* Switch to 3 columns */
+      }
+    }
 
-	td.gridtd {
-		vertical-align: top;
-	}
+	@media (max-width: 806px) {
+      div.responsivegrid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+	@media (max-width: 556px) {
+      div.responsivegrid {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
 
 	@media print {
   		.no-print {
@@ -278,17 +293,10 @@ function createCalendar(year) {
 	const thisMonth = today.getMonth() + 1; 
 	const thisDay = today.getDate();
 
-	let table = $('<table>', {
-		class: "calgrid"
+	let table = $('<div>', {
+		class: "responsivegrid"
 	});
-	let tr = null;
 	for (let month=1; month<=12; month++) {
-		if (((month - 1) % 4) == 0) {
-			tr = $("<tr>", {
-				class: "gridtr"
-			});
-			table.append(tr);
-		}
 		const startIndex = dayOfWeek(year, month, 1);
 		const nDays = daysInMonth(year, month);
 		let selectedDay = -1;
@@ -297,12 +305,7 @@ function createCalendar(year) {
 		}
 
 		const monthDiv = createMonth(year, month, startIndex, nDays, selectedDay);
-		const td = $("<td>", {
-			class: "gridtd"
-		});
-
-		td.append(monthDiv);
-		tr.append(td);
+		table.append(monthDiv);
 	}
 
 	$('#calendar').append(table);
