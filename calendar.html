@@ -252,11 +252,17 @@ function updateInfoBox(start, end) {
         const days = Math.round((end - start) / msInDay) + 1;
         const weeks = Math.floor(days / 7);
         const extraDays = days % 7;
-        let weekStr = weeks + ' weeks';
-        if (extraDays > 0) {
-                weekStr += ' and ' + extraDays + ' days';
+        const dayText = days + ' day' + (days === 1 ? '' : 's');
+        let weekStr = '';
+        if (weeks > 0) {
+                weekStr = weeks + ' week' + (weeks === 1 ? '' : 's');
+                if (extraDays > 0) {
+                        weekStr += ' and ' + extraDays + ' day' + (extraDays === 1 ? '' : 's');
+                }
+        } else {
+                weekStr = extraDays + ' day' + (extraDays === 1 ? '' : 's');
         }
-        $('#infoBox').html(days + ' days<br>' + weekStr).css('display', 'inline-block');
+        $('#infoBox').html(dayText + '<br>' + weekStr).css('display', 'inline-block');
 }
 
 function handleDayClick() {
