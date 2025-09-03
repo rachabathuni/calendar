@@ -145,12 +145,13 @@
         }
 
         div.info {
-                margin-top: 15px;
+                margin: 15px auto 0 auto;
                 font-size: 1.0em;
                 background-color: lemonchiffon;
                 padding: 8px;
                 border: none;
                 display: none;
+                width: fit-content;
         }
 
 </style>
@@ -255,7 +256,7 @@ function updateInfoBox(start, end) {
         if (extraDays > 0) {
                 weekStr += ' and ' + extraDays + ' days';
         }
-        $('#infoBox').html(days + ' days<br>' + weekStr).show();
+        $('#infoBox').html(days + ' days<br>' + weekStr).css('display', 'inline-block');
 }
 
 function handleDayClick() {
