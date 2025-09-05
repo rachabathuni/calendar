@@ -247,6 +247,35 @@ function resetSelection() {
         $('#infoBox').hide().empty();
 }
 
+function highlightRange() {
+        $('td.selected, td.range, div.selected, div.range').removeClass('selected range');
+        if (!g_startDate && !g_endDate) {
+                $('#infoBox').hide().empty();
+                return;
+        }
+
+        if (g_startDate && g_endDate) {
+                const start = g_startDate <= g_endDate ? g_startDate : g_endDate;
+                const end = g_startDate <= g_endDate ? g_endDate : g_startDate;
+                $('td[data-date]').each(function() {
+                        const current = parseDate($(this).data('date'));
+                        if (current >= start && current <= end) {
+                                addClassToCell($(this), 'range');
+                        }
+                });
+                const startStr = formatDate(start.getFullYear(), start.getMonth() + 1, start.getDate());
+                const endStr = formatDate(end.getFullYear(), end.getMonth() + 1, end.getDate());
+                addClassToCell($(`td[data-date='${startStr}']`), 'selected');
+                addClassToCell($(`td[data-date='${endStr}']`), 'selected');
+                updateInfoBox(start, end);
+        } else {
+                const date = g_startDate || g_endDate;
+                const dateStr = formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+                addClassToCell($(`td[data-date='${dateStr}']`), 'selected');
+                $('#infoBox').hide().empty();
+        }
+}
+
 function updateInfoBox(start, end) {
         const msInDay = 24 * 60 * 60 * 1000;
         const days = Math.round((end - start) / msInDay) + 1;
@@ -277,23 +306,10 @@ function handleDayClick() {
         const clicked = parseDate(dateStr);
         if (!g_startDate) {
                 g_startDate = clicked;
-                addClassToCell($(this), 'selected');
         } else {
                 g_endDate = clicked;
-                const start = g_startDate <= g_endDate ? g_startDate : g_endDate;
-                const end = g_startDate <= g_endDate ? g_endDate : g_startDate;
-                $('td[data-date]').each(function() {
-                        const current = parseDate($(this).data('date'));
-                        if (current >= start && current <= end) {
-                                addClassToCell($(this), 'range');
-                        }
-                });
-                const startStr = formatDate(start.getFullYear(), start.getMonth() + 1, start.getDate());
-                const endStr = formatDate(end.getFullYear(), end.getMonth() + 1, end.getDate());
-                addClassToCell($(`td[data-date='${startStr}']`), 'selected');
-                addClassToCell($(`td[data-date='${endStr}']`), 'selected');
-                updateInfoBox(start, end);
         }
+        highlightRange();
 }
 
 
@@ -391,12 +407,11 @@ function nextYear() {
 
 
 function createCalendar(year) {
-        resetSelection();
         $('#calendar').empty();
         setYears(year);
         const today = new Date();
-	const thisYear = today.getFullYear();
-	const thisMonth = today.getMonth() + 1; 
+        const thisYear = today.getFullYear();
+        const thisMonth = today.getMonth() + 1;
 	const thisDay = today.getDate();
 
 	let table = $('<div>', {
@@ -414,7 +429,8 @@ function createCalendar(year) {
 		table.append(monthDiv);
 	}
 
-	$('#calendar').append(table);
+        $('#calendar').append(table);
+        highlightRange();
 }
 
 
